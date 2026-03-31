@@ -1,0 +1,123 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  firebaseUid     String   @unique @map("firebase_uid")
+  phone           String
+  name            String
+  email           String   @unique
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  orders          Order[]
+  courseEnrollments CourseEnrollment[]
+  webinarRegistrations WebinarRegistration[]
+
+  @@map("users")
+}
+
+model Webinar {
+  id          Int      @id @default(autoincrement())
+  title       String
+  image       String
+  description String
+  teacher     String
+  date        DateTime @db.Date
+  time        String
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  registrations WebinarRegistration[]
+
+  @@map("webinars")
+}
+
+model Course {
+  id            Int      @id @default(autoincrement())
+  title         String
+  image         String
+  description   String
+  syllabus      String
+  teacher       String
+  price         Int
+  startDate     DateTime @map("start_date") @db.Date
+  endDate       DateTime @map("end_date") @db.Date
+  telegramLink  String?  @map("telegram_link")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  orders        Order[]
+  enrollments   CourseEnrollment[]
+
+  @@map("courses")
+}
+
+model Order {
+  id                Int      @id @default(autoincrement())
+  userId            Int      @map("user_id")
+  courseId          Int      @map("course_id")
+  razorpayOrderId   String   @unique @map("razorpay_order_id")
+  amount            Int
+  currency          String   @default("INR")
+  status            String   @default("created")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course            Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  payment           Payment?
+  enrollment        CourseEnrollment?
+
+  @@map("orders")
+}
+
+model Payment {
+  id                  Int      @id @default(autoincrement())
+  orderId             Int      @unique @map("order_id")
+  razorpayPaymentId   String   @unique @map("razorpay_payment_id")
+  razorpaySignature   String   @map("razorpay_signature")
+  status              String   @default("success")
+  paidAt              DateTime @default(now()) @map("paid_at")
+
+  order               Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model CourseEnrollment {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  courseId   Int      @map("course_id")
+  orderId    Int      @unique @map("order_id")
+  enrolledAt DateTime @default(now()) @map("enrolled_at")
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@map("course_enrollments")
+}
+
+model WebinarRegistration {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  webinarId    Int      @map("webinar_id")
+  registeredAt DateTime @default(now()) @map("registered_at")
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  webinar      Webinar  @relation(fields: [webinarId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, webinarId])
+  @@map("webinar_registrations")
+}
