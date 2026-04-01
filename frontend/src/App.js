@@ -11,7 +11,7 @@ import WebinarsPage from './pages/WebinarsPage';
 import WebinarDetailPage from './pages/WebinarDetailPage';
 import AuthPage from './pages/AuthPage';
 import WelcomePage from './pages/WelcomePage';
-import MyCoursesPage from './pages/MyCoursesPage';
+import UserDashboard from './pages/UserDashboard';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminCoursesPage from './pages/AdminCoursesPage';
@@ -68,12 +68,23 @@ function App() {
                   <WelcomePage />
                 </ProtectedRoute>
               } />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <main className="pt-16">
+                      <UserDashboard />
+                    </main>
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } />
               <Route path="/my-courses" element={
                 <ProtectedRoute>
                   <>
                     <Header />
                     <main className="pt-16">
-                      <MyCoursesPage />
+                      <UserDashboard />
                     </main>
                     <Footer />
                   </>

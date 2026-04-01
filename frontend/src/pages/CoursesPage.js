@@ -84,13 +84,13 @@ const CoursesPage = () => {
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-gray-500">Start Date</span>
                       <span className="text-sm font-semibold text-gray-800">
-                        {formatDate(course.start_date)}
+                        {course.startDate ? formatDate(course.startDate) : 'TBA'}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-500">End Date</span>
                       <span className="text-sm font-semibold text-gray-800">
-                        {formatDate(course.end_date)}
+                        {course.endDate ? formatDate(course.endDate) : 'TBA'}
                       </span>
                     </div>
                   </div>

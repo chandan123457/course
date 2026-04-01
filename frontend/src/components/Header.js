@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -7,6 +7,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { currentUser, dbUser, signOut } = useAuth();
   const isHomePage = location.pathname === '/';
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleClick = (e, targetId) => {
     e.preventDefault();
@@ -71,15 +72,46 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-4">
           {currentUser ? (
-            <>
-              <span className="text-sm font-medium">{dbUser?.name || 'User'}</span>
+            <div className="relative">
               <button
-                onClick={handleLogout}
-                className="bg-gray-200 text-gray-800 px-6 py-2.5 rounded-full font-bold text-sm hover:shadow-lg transition-all active:scale-95"
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-full transition-all"
               >
-                Logout
+                <div className="w-8 h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                  {(dbUser?.name || currentUser?.displayName || 'U').charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm font-medium">{dbUser?.name || currentUser?.displayName || 'User'}</span>
+                <svg className={`w-4 h-4 transition-transform ${showDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
-            </>
+              
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      navigate('/my-courses');
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2"
+                  >
+                    <span>📚</span>
+                    <span>My Courses</span>
+                  </button>
+                  <hr className="my-2" />
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      handleLogout();
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2 text-red-600"
+                  >
+                    <span>🚪</span>
+                    <span>Logout</span>
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <Link
               to="/auth"

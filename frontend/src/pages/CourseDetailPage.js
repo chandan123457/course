@@ -225,14 +225,15 @@ const CourseDetailPage = () => {
                   <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
                     ✓ You are enrolled in this course
                   </div>
+                  <button
+                    onClick={() => navigate('/my-courses')}
+                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-lg font-bold text-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
+                  >
+                    Access Course
+                  </button>
                   {telegramLink && (
                     <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-                      <h4 className="font-bold mb-2">Next Steps:</h4>
-                      <ul className="text-sm space-y-2 mb-4">
-                        <li>• Join the Telegram group to connect with peers</li>
-                        <li>• Access course materials and assignments</li>
-                        <li>• Attend live sessions and webinars</li>
-                      </ul>
+                      <h4 className="font-bold mb-2">Join Community:</h4>
                       <a
                         href={telegramLink}
                         target="_blank"

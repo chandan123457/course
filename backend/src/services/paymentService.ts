@@ -2,17 +2,29 @@ import Razorpay from 'razorpay';
 import prisma from '../db/prisma';
 import { verifyRazorpaySignature } from '../utils/razorpay';
 
-// Initialize Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
+// Lazy initialization of Razorpay
+let razorpay: Razorpay | null = null;
+
+const getRazorpayInstance = () => {
+  if (!razorpay) {
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+      throw new Error('Razorpay credentials are not configured. Please check your .env file.');
+    }
+    razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+  }
+  return razorpay;
+};
 
 export const paymentService = {
   // Create Razorpay order
   async createOrder(userId: number, courseId: number, amount: number) {
+    const razorpayInstance = getRazorpayInstance();
+    
     // Create Razorpay order
-    const razorpayOrder = await razorpay.orders.create({
+    const razorpayOrder = await razorpayInstance.orders.create({
       amount: amount * 100, // Convert to paise
       currency: 'INR',
       receipt: `order_${Date.now()}`,

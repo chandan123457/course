@@ -2,5 +2,6 @@ node_modules
 dist
 .env
 *.log
+.env.example
 
 /src/generated/prisma
