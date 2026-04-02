@@ -67,7 +67,7 @@ const Header = () => {
           <a className="hover:text-primary transition-colors cursor-pointer" onClick={(e) => handleClick(e, '#training')}>Training Programs</a>
           <a className="hover:text-primary transition-colors cursor-pointer" onClick={(e) => handleClick(e, '#interviews')}>Interviews</a>
           <a className="hover:text-primary transition-colors cursor-pointer" onClick={(e) => handleClick(e, '#placement')}>Placement</a>
-          <Link to="/courses" className="hover:text-primary transition-colors cursor-pointer">Courses</Link>
+          <Link to="/courses" className="hover:text-primary transition-colors cursor-pointer">Training Programs</Link>
           <Link to="/webinars" className="hover:text-primary transition-colors cursor-pointer">Webinars</Link>
         </div>
         <div className="flex items-center gap-4">
@@ -75,39 +75,53 @@ const Header = () => {
             <div className="relative">
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-full transition-all"
+                className="flex items-center gap-2 bg-[#0F1A2E] hover:bg-[#1a2a45] px-4 py-2 rounded-full transition-all"
               >
-                <div className="w-8 h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-8 h-8 bg-[#E4B61A] rounded-full flex items-center justify-center text-[#0F1A2E] font-black">
                   {(dbUser?.name || currentUser?.displayName || 'U').charAt(0).toUpperCase()}
                 </div>
-                <span className="text-sm font-medium">{dbUser?.name || currentUser?.displayName || 'User'}</span>
-                <svg className={`w-4 h-4 transition-transform ${showDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span className="text-sm font-medium text-white">{dbUser?.name || currentUser?.displayName || 'User'}</span>
+                <svg className={`w-4 h-4 text-white transition-transform ${showDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-[#0F1A2E]/10 py-2 z-50">
+                  <div className="px-4 py-3 border-b border-[#0F1A2E]/10">
+                    <p className="text-xs text-[#0F1A2E]/50 font-medium uppercase tracking-wider">Signed in as</p>
+                    <p className="text-sm font-bold text-[#0F1A2E] truncate">{dbUser?.email || currentUser?.email}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      navigate('/dashboard');
+                    }}
+                    className="w-full text-left px-4 py-3 hover:bg-[#E9EAEC] transition-colors flex items-center gap-3"
+                  >
+                    <span className="text-lg">📊</span>
+                    <span className="font-medium text-[#0F1A2E]">Dashboard</span>
+                  </button>
                   <button
                     onClick={() => {
                       setShowDropdown(false);
                       navigate('/my-courses');
                     }}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2"
+                    className="w-full text-left px-4 py-3 hover:bg-[#E9EAEC] transition-colors flex items-center gap-3"
                   >
-                    <span>📚</span>
-                    <span>My Courses</span>
+                    <span className="text-lg">📚</span>
+                    <span className="font-medium text-[#0F1A2E]">My Programs</span>
                   </button>
-                  <hr className="my-2" />
+                  <hr className="my-2 border-[#0F1A2E]/10" />
                   <button
                     onClick={() => {
                       setShowDropdown(false);
                       handleLogout();
                     }}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2 text-red-600"
+                    className="w-full text-left px-4 py-3 hover:bg-red-50 transition-colors flex items-center gap-3 text-red-600"
                   >
-                    <span>🚪</span>
-                    <span>Logout</span>
+                    <span className="text-lg">🚪</span>
+                    <span className="font-medium">Logout</span>
                   </button>
                 </div>
               )}

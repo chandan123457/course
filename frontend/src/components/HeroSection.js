@@ -109,8 +109,8 @@ const HeroSection = () => {
               </svg>
             </span>
           </h1>
-          <div className="inline-block px-6 py-3 bg-secondary text-primary font-black text-sm rounded-full uppercase tracking-wider animate-pulse shadow-lg">
-            ⏳ Coming Soon - Be Among The First!
+          <div className="inline-block px-6 py-3 bg-secondary text-primary font-black text-sm rounded-full uppercase tracking-wider shadow-lg">
+            🚀 Start Your Journey Today
           </div>
           <p className="text-xl lg:text-2xl max-w-2xl mx-auto leading-relaxed text-gray-700 font-medium">
             The bridge between academic theory and professional mastery. Gain real-world experience through

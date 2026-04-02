@@ -45,13 +45,13 @@ function App() {
                   <Footer />
                 </>
               } />
+              {/* Training Programs page - NO footer */}
               <Route path="/courses" element={
                 <>
                   <Header />
                   <main className="pt-16">
                     <CoursesPage />
                   </main>
-                  <Footer />
                 </>
               } />
               <Route path="/webinars" element={
@@ -68,6 +68,7 @@ function App() {
                   <WelcomePage />
                 </ProtectedRoute>
               } />
+              {/* Dashboard - NO footer */}
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <>
@@ -75,10 +76,10 @@ function App() {
                     <main className="pt-16">
                       <UserDashboard />
                     </main>
-                    <Footer />
                   </>
                 </ProtectedRoute>
               } />
+              {/* My Courses - NO footer */}
               <Route path="/my-courses" element={
                 <ProtectedRoute>
                   <>
@@ -86,12 +87,11 @@ function App() {
                     <main className="pt-16">
                       <UserDashboard />
                     </main>
-                    <Footer />
                   </>
                 </ProtectedRoute>
               } />
 
-              {/* Protected User Routes */}
+              {/* Protected User Routes - Course Detail NO footer */}
               <Route
                 path="/courses/:id"
                 element={
@@ -101,7 +101,6 @@ function App() {
                       <main className="pt-16">
                         <CourseDetailPage />
                       </main>
-                      <Footer />
                     </>
                   </ProtectedRoute>
                 }

@@ -12,6 +12,7 @@ const AdminDashboard = () => {
     activeWebinars: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const adminApi = createAdminApi();
 
@@ -37,178 +38,323 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl font-semibold">Loading dashboard...</div>
+      <div className="min-h-screen flex items-center justify-center bg-[#0F1A2E]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E4B61A] mx-auto mb-4"></div>
+          <p className="text-white/60 font-medium">Loading dashboard...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-gray-600">Welcome back, {adminUser?.username}</p>
+    <div className="min-h-screen bg-[#0a1220] flex">
+      {/* Sidebar */}
+      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-[#0F1A2E] border-r border-white/5 transition-all duration-300 flex flex-col`}>
+        {/* Logo */}
+        <div className="p-6 border-b border-white/5">
+          <Link to="/admin/dashboard" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#E4B61A] flex items-center justify-center flex-shrink-0">
+              <span className="text-[#0F1A2E] font-black text-lg">G</span>
             </div>
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">C</span>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Courses</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalCourses}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">A</span>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Courses</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.activeCourses}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">W</span>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Webinars</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalWebinars}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">L</span>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Live Webinars</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.activeWebinars}</p>
-              </div>
-            </div>
-          </div>
+            {sidebarOpen && (
+              <span className="text-xl font-black text-white">
+                Grad<span className="text-[#E4B61A]">ToPro</span>
+              </span>
+            )}
+          </Link>
         </div>
 
-        {/* Management Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Course Management */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Course Management</h3>
-              <p className="text-gray-600 mb-6">
-                Create, edit, and manage your premium courses. Set pricing, upload content, and manage enrollments.
-              </p>
-              <div className="space-y-3">
-                <Link
-                  to="/admin/courses"
-                  className="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  View All Courses
-                </Link>
-                <Link
-                  to="/admin/courses/create"
-                  className="block w-full bg-green-600 text-white text-center py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  Create New Course
-                </Link>
-              </div>
-            </div>
-          </div>
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-2">
+          <Link
+            to="/admin/dashboard"
+            className="flex items-center gap-3 px-4 py-3 bg-[#E4B61A]/10 text-[#E4B61A] rounded-xl font-medium transition-all"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            {sidebarOpen && <span>Dashboard</span>}
+          </Link>
 
-          {/* Webinar Management */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Webinar Management</h3>
-              <p className="text-gray-600 mb-6">
-                Schedule free webinars, manage registrations, and engage with your audience through live sessions.
-              </p>
-              <div className="space-y-3">
-                <Link
-                  to="/admin/webinars"
-                  className="block w-full bg-purple-600 text-white text-center py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors"
-                >
-                  View All Webinars
-                </Link>
-                <Link
-                  to="/admin/webinars/create"
-                  className="block w-full bg-indigo-600 text-white text-center py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors"
-                >
-                  Schedule New Webinar
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+          <Link
+            to="/admin/courses"
+            className="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl font-medium transition-all"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            {sidebarOpen && <span>Courses</span>}
+          </Link>
 
-        {/* Quick Actions */}
-        <div className="mt-8 bg-white rounded-lg shadow p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Link
-              to="/admin/courses/create"
-              className="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <div className="text-blue-500 text-2xl mb-2">📚</div>
-              <div className="font-medium">Add Course</div>
-            </Link>
-            <Link
-              to="/admin/webinars/create"
-              className="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <div className="text-purple-500 text-2xl mb-2">🎥</div>
-              <div className="font-medium">Schedule Webinar</div>
-            </Link>
+          <Link
+            to="/admin/webinars"
+            className="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl font-medium transition-all"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            {sidebarOpen && <span>Webinars</span>}
+          </Link>
+
+          <div className="pt-4 border-t border-white/5 mt-4">
             <Link
               to="/"
-              className="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-xl font-medium transition-all"
             >
-              <div className="text-green-500 text-2xl mb-2">🌐</div>
-              <div className="font-medium">View Website</div>
-            </Link>
-            <Link
-              to="/admin/dashboard"
-              className="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <div className="text-orange-500 text-2xl mb-2">📊</div>
-              <div className="font-medium">Analytics</div>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+              </svg>
+              {sidebarOpen && <span>View Website</span>}
             </Link>
           </div>
+        </nav>
+
+        {/* User Section */}
+        <div className="p-4 border-t border-white/5">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-[#E4B61A] rounded-full flex items-center justify-center">
+              <span className="text-[#0F1A2E] font-black">
+                {adminUser?.username?.charAt(0)?.toUpperCase() || 'A'}
+              </span>
+            </div>
+            {sidebarOpen && (
+              <div>
+                <p className="text-white font-medium text-sm">{adminUser?.username || 'Admin'}</p>
+                <p className="text-white/40 text-xs">Administrator</p>
+              </div>
+            )}
+          </div>
+          <button
+            onClick={handleLogout}
+            className={`w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500/10 text-red-400 rounded-xl hover:bg-red-500/20 transition-all font-medium text-sm`}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            {sidebarOpen && <span>Logout</span>}
+          </button>
         </div>
-      </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-auto">
+        {/* Top Header */}
+        <header className="bg-[#0F1A2E]/50 backdrop-blur-xl border-b border-white/5 sticky top-0 z-10">
+          <div className="px-8 py-4 flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-black text-white">Dashboard Overview</h1>
+              <p className="text-white/40 text-sm">Welcome back, {adminUser?.username || 'Admin'}</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <button className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-xl transition-all">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+              </button>
+              <div className="w-px h-8 bg-white/10"></div>
+              <div className="text-right">
+                <p className="text-white/60 text-xs">Today</p>
+                <p className="text-white font-medium text-sm">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div className="p-8">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {/* Total Courses */}
+            <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20 rounded-2xl p-6 hover:border-blue-500/40 transition-all group">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <span className="text-blue-400 text-xs font-bold bg-blue-500/10 px-2 py-1 rounded-full">TOTAL</span>
+              </div>
+              <p className="text-4xl font-black text-white mb-1">{stats.totalCourses}</p>
+              <p className="text-white/40 font-medium">Total Courses</p>
+            </div>
+
+            {/* Active Courses */}
+            <div className="bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20 rounded-2xl p-6 hover:border-green-500/40 transition-all group">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="text-green-400 text-xs font-bold bg-green-500/10 px-2 py-1 rounded-full">ACTIVE</span>
+              </div>
+              <p className="text-4xl font-black text-white mb-1">{stats.activeCourses}</p>
+              <p className="text-white/40 font-medium">Active Courses</p>
+            </div>
+
+            {/* Total Webinars */}
+            <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20 rounded-2xl p-6 hover:border-purple-500/40 transition-all group">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <span className="text-purple-400 text-xs font-bold bg-purple-500/10 px-2 py-1 rounded-full">TOTAL</span>
+              </div>
+              <p className="text-4xl font-black text-white mb-1">{stats.totalWebinars}</p>
+              <p className="text-white/40 font-medium">Total Webinars</p>
+            </div>
+
+            {/* Live Webinars */}
+            <div className="bg-gradient-to-br from-[#E4B61A]/10 to-[#E4B61A]/5 border border-[#E4B61A]/20 rounded-2xl p-6 hover:border-[#E4B61A]/40 transition-all group">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 bg-[#E4B61A]/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <svg className="w-6 h-6 text-[#E4B61A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
+                  </svg>
+                </div>
+                <span className="text-[#E4B61A] text-xs font-bold bg-[#E4B61A]/10 px-2 py-1 rounded-full flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-[#E4B61A] rounded-full animate-pulse"></span>
+                  LIVE
+                </span>
+              </div>
+              <p className="text-4xl font-black text-white mb-1">{stats.activeWebinars}</p>
+              <p className="text-white/40 font-medium">Live Webinars</p>
+            </div>
+          </div>
+
+          {/* Management Sections */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Course Management */}
+            <div className="bg-[#0F1A2E] border border-white/5 rounded-2xl overflow-hidden">
+              <div className="p-6 border-b border-white/5">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Course Management</h3>
+                    <p className="text-white/40 text-sm">Create and manage training programs</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <p className="text-white/60 text-sm mb-6">
+                  Build premium courses, set pricing, upload content, and manage student enrollments from one place.
+                </p>
+                <div className="space-y-3">
+                  <Link
+                    to="/admin/courses"
+                    className="flex items-center justify-between w-full px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all group"
+                  >
+                    <span className="text-white font-medium">View All Courses</span>
+                    <svg className="w-5 h-5 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                  <Link
+                    to="/admin/courses/create"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all font-bold"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Create New Course
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Webinar Management */}
+            <div className="bg-[#0F1A2E] border border-white/5 rounded-2xl overflow-hidden">
+              <div className="p-6 border-b border-white/5">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Webinar Management</h3>
+                    <p className="text-white/40 text-sm">Schedule and manage live sessions</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <p className="text-white/60 text-sm mb-6">
+                  Schedule free webinars, manage registrations, and engage with your audience through live sessions.
+                </p>
+                <div className="space-y-3">
+                  <Link
+                    to="/admin/webinars"
+                    className="flex items-center justify-between w-full px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all group"
+                  >
+                    <span className="text-white font-medium">View All Webinars</span>
+                    <svg className="w-5 h-5 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                  <Link
+                    to="/admin/webinars/create"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-xl transition-all font-bold"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Schedule New Webinar
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="bg-[#0F1A2E] border border-white/5 rounded-2xl p-6">
+            <h3 className="text-lg font-bold text-white mb-6">Quick Actions</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Link
+                to="/admin/courses/create"
+                className="flex flex-col items-center gap-3 p-6 bg-white/5 hover:bg-blue-500/10 border border-white/5 hover:border-blue-500/30 rounded-2xl transition-all group"
+              >
+                <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-2xl">📚</span>
+                </div>
+                <span className="text-white font-medium text-sm text-center">Add Course</span>
+              </Link>
+
+              <Link
+                to="/admin/webinars/create"
+                className="flex flex-col items-center gap-3 p-6 bg-white/5 hover:bg-purple-500/10 border border-white/5 hover:border-purple-500/30 rounded-2xl transition-all group"
+              >
+                <div className="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-2xl">🎥</span>
+                </div>
+                <span className="text-white font-medium text-sm text-center">Schedule Webinar</span>
+              </Link>
+
+              <Link
+                to="/"
+                className="flex flex-col items-center gap-3 p-6 bg-white/5 hover:bg-green-500/10 border border-white/5 hover:border-green-500/30 rounded-2xl transition-all group"
+              >
+                <div className="w-14 h-14 bg-green-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-2xl">🌐</span>
+                </div>
+                <span className="text-white font-medium text-sm text-center">View Website</span>
+              </Link>
+
+              <div className="flex flex-col items-center gap-3 p-6 bg-white/5 hover:bg-[#E4B61A]/10 border border-white/5 hover:border-[#E4B61A]/30 rounded-2xl transition-all group cursor-pointer">
+                <div className="w-14 h-14 bg-[#E4B61A]/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-2xl">📊</span>
+                </div>
+                <span className="text-white font-medium text-sm text-center">Analytics</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };

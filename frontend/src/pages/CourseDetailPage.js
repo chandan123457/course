@@ -17,7 +17,6 @@ const CourseDetailPage = () => {
     fetchCourse();
   }, [id]);
 
-  // Check enrollment after course is loaded
   useEffect(() => {
     if (course) {
       checkEnrollment();
@@ -40,7 +39,6 @@ const CourseDetailPage = () => {
       const response = await api.get(`/users/courses/${id}/enrollment`);
       if (response.data.data.enrolled) {
         setEnrolled(true);
-        // Set telegram link from course data if available
         if (course?.telegramLink) {
           setTelegramLink(course.telegramLink);
         }
@@ -51,7 +49,6 @@ const CourseDetailPage = () => {
   };
 
   const handleEnroll = async () => {
-    // Check if Razorpay is loaded
     if (!razorpayLoaded) {
       alert('Payment system is loading. Please wait a moment and try again.');
       return;
@@ -65,14 +62,12 @@ const CourseDetailPage = () => {
     setEnrolling(true);
 
     try {
-      // Create order
       const orderResponse = await api.post('/payments/create-order', {
         courseId: parseInt(id),
       });
 
       const { orderId, amount, currency, keyId } = orderResponse.data.data;
 
-      // Razorpay checkout options
       const options = {
         key: keyId,
         amount: amount,
@@ -82,20 +77,17 @@ const CourseDetailPage = () => {
         order_id: orderId,
         handler: async function (response) {
           try {
-            // Verify payment
             const verifyResponse = await api.post('/payments/verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
             });
 
-            // Payment successful
             setEnrolled(true);
-            // Set telegram link from course data
             if (course?.telegramLink) {
               setTelegramLink(course.telegramLink);
             }
-            alert('Payment successful! You are now enrolled in the course.');
+            alert('Payment successful! You are now enrolled in the program.');
           } catch (error) {
             console.error('Payment verification failed:', error);
             alert('Payment verification failed. Please contact support.');
@@ -109,7 +101,7 @@ const CourseDetailPage = () => {
           contact: '',
         },
         theme: {
-          color: '#4F46E5',
+          color: '#0F1A2E',
         },
       };
 
@@ -137,22 +129,28 @@ const CourseDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl font-semibold">Loading course details...</div>
+      <div className="min-h-screen flex items-center justify-center bg-[#E9EAEC]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E4B61A] mx-auto mb-4"></div>
+          <p className="text-[#0F1A2E] font-medium">Loading program details...</p>
+        </div>
       </div>
     );
   }
 
   if (!course) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Course not found</h2>
+      <div className="min-h-screen flex items-center justify-center bg-[#E9EAEC]">
+        <div className="text-center bg-white p-8 rounded-2xl shadow-lg">
+          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-4xl">❌</span>
+          </div>
+          <h2 className="text-2xl font-bold text-[#0F1A2E] mb-4">Program not found</h2>
           <button
             onClick={() => navigate('/courses')}
-            className="text-indigo-600 hover:underline"
+            className="text-[#E4B61A] font-bold hover:underline"
           >
-            Back to Courses
+            ← Back to Training Programs
           </button>
         </div>
       </div>
@@ -160,40 +158,75 @@ const CourseDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 py-12">
+    <div className="min-h-screen bg-[#E9EAEC] py-12">
       <div className="container mx-auto px-6">
+        {/* Back Button */}
         <button
           onClick={() => navigate('/courses')}
-          className="mb-6 text-indigo-600 hover:underline flex items-center gap-2"
+          className="mb-8 inline-flex items-center gap-2 text-[#0F1A2E] font-bold hover:text-[#E4B61A] transition-colors"
         >
-          ← Back to Courses
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Training Programs
         </button>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-              <div className="h-96 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-[#0F1A2E]/5">
+              {/* Hero Image */}
+              <div className="h-80 lg:h-96 overflow-hidden relative">
                 <img
                   src={course.image}
                   alt={course.title}
                   className="w-full h-full object-cover"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F1A2E]/80 to-transparent"></div>
+                <div className="absolute bottom-6 left-6 right-6">
+                  <span className="px-3 py-1 bg-[#E4B61A] text-[#0F1A2E] text-xs font-black uppercase rounded-full">
+                    Training Program
+                  </span>
+                </div>
               </div>
+              
+              {/* Content */}
               <div className="p-8">
-                <h1 className="text-4xl font-extrabold mb-4">{course.title}</h1>
-                <p className="text-gray-600 text-lg mb-6">{course.description}</p>
+                <h1 className="text-3xl lg:text-4xl font-black text-[#0F1A2E] mb-4">{course.title}</h1>
+                <p className="text-[#0F1A2E]/70 text-lg mb-8 leading-relaxed">{course.description}</p>
 
-                <div className="border-t border-gray-200 pt-6 mb-6">
-                  <h3 className="text-2xl font-bold mb-4">Course Syllabus</h3>
-                  <div className="prose max-w-none">
-                    <p className="whitespace-pre-wrap text-gray-700">{course.syllabus}</p>
+                {/* Syllabus Section */}
+                <div className="border-t border-[#0F1A2E]/10 pt-8 mb-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-[#E4B61A]/10 rounded-xl flex items-center justify-center">
+                      <span className="text-xl">📋</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#0F1A2E]">Program Syllabus</h3>
+                  </div>
+                  <div className="bg-[#E9EAEC] rounded-xl p-6">
+                    <p className="whitespace-pre-wrap text-[#0F1A2E]/80 leading-relaxed">{course.syllabus}</p>
                   </div>
                 </div>
 
-                <div className="border-t border-gray-200 pt-6">
-                  <h3 className="text-2xl font-bold mb-4">Instructor</h3>
-                  <p className="text-lg font-semibold text-indigo-600">{course.teacher}</p>
+                {/* Instructor Section */}
+                <div className="border-t border-[#0F1A2E]/10 pt-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-[#E4B61A]/10 rounded-xl flex items-center justify-center">
+                      <span className="text-xl">👨‍🏫</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#0F1A2E]">Instructor</h3>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 bg-[#0F1A2E] rounded-full flex items-center justify-center">
+                      <span className="text-2xl text-[#E4B61A] font-black">
+                        {course.teacher?.charAt(0) || 'T'}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-xl font-bold text-[#0F1A2E]">{course.teacher}</p>
+                      <p className="text-[#0F1A2E]/60">Industry Expert</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -201,45 +234,62 @@ const CourseDetailPage = () => {
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-xl p-8 sticky top-24">
+            <div className="bg-white rounded-2xl shadow-lg p-8 sticky top-24 border border-[#0F1A2E]/5">
+              {/* Price */}
               <div className="mb-6">
-                <div className="text-4xl font-extrabold text-indigo-600 mb-2">
+                <div className="text-4xl font-black text-[#0F1A2E] mb-1">
                   ₹{course.price}
                 </div>
-                <p className="text-gray-500 text-sm">One-time payment</p>
+                <p className="text-[#0F1A2E]/50 text-sm font-medium">One-time payment</p>
               </div>
 
-              <div className="space-y-4 mb-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Start Date</span>
-                  <span className="font-semibold">{formatDate(course.startDate)}</span>
+              {/* Course Meta */}
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center justify-between py-3 border-b border-[#0F1A2E]/10">
+                  <span className="text-[#0F1A2E]/60 font-medium">Start Date</span>
+                  <span className="font-bold text-[#0F1A2E]">{formatDate(course.startDate)}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">End Date</span>
-                  <span className="font-semibold">{formatDate(course.endDate)}</span>
+                <div className="flex items-center justify-between py-3 border-b border-[#0F1A2E]/10">
+                  <span className="text-[#0F1A2E]/60 font-medium">End Date</span>
+                  <span className="font-bold text-[#0F1A2E]">{formatDate(course.endDate)}</span>
+                </div>
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-[#0F1A2E]/60 font-medium">Status</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    course.isActive 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    {course.isActive ? 'Enrolling Now' : 'Coming Soon'}
+                  </span>
                 </div>
               </div>
 
+              {/* CTA Section */}
               {enrolled ? (
                 <div className="space-y-4">
-                  <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
-                    ✓ You are enrolled in this course
+                  <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl flex items-center gap-2">
+                    <span className="text-lg">✓</span>
+                    <span className="font-bold">You are enrolled in this program</span>
                   </div>
                   <button
                     onClick={() => navigate('/my-courses')}
-                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-lg font-bold text-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
+                    className="w-full bg-[#0F1A2E] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#E4B61A] hover:text-[#0F1A2E] transition-all duration-300 shadow-lg"
                   >
-                    Access Course
+                    Access Program →
                   </button>
                   {telegramLink && (
-                    <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-                      <h4 className="font-bold mb-2">Join Community:</h4>
+                    <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl">
+                      <h4 className="font-bold text-[#0F1A2E] mb-3">Join Community:</h4>
                       <a
                         href={telegramLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block w-full bg-blue-600 text-white text-center py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors"
+                        className="flex items-center justify-center gap-2 w-full bg-blue-500 text-white py-3 rounded-xl font-bold hover:bg-blue-600 transition-colors"
                       >
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.12.098.153.228.166.331.015.136.033.393.019.598z"/>
+                        </svg>
                         Join Telegram Group
                       </a>
                     </div>
@@ -249,39 +299,34 @@ const CourseDetailPage = () => {
                 <button
                   onClick={handleEnroll}
                   disabled={enrolling || razorpayLoading || !razorpayLoaded}
-                  className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-lg font-bold text-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
+                  className="w-full bg-[#E4B61A] text-[#0F1A2E] py-4 rounded-xl font-black text-lg hover:bg-[#d4a610] transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {enrolling
                     ? 'Processing...'
                     : razorpayLoading
-                    ? 'Loading Payment System...'
+                    ? 'Loading Payment...'
                     : 'Enroll Now'}
                 </button>
               )}
 
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h4 className="font-bold mb-3">What you'll get:</h4>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500">✓</span>
-                    <span>Lifetime access to course materials</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500">✓</span>
-                    <span>Live sessions and webinars</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500">✓</span>
-                    <span>Industry-recognized certification</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500">✓</span>
-                    <span>Dedicated Telegram community</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500">✓</span>
-                    <span>Career guidance and support</span>
-                  </li>
+              {/* Benefits Section */}
+              <div className="mt-8 pt-8 border-t border-[#0F1A2E]/10">
+                <h4 className="font-bold text-[#0F1A2E] mb-4">What you'll get:</h4>
+                <ul className="space-y-3">
+                  {[
+                    'Lifetime access to program materials',
+                    'Live sessions and webinars',
+                    'Industry-recognized certification',
+                    'Dedicated Telegram community',
+                    'Career guidance and support'
+                  ].map((benefit, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-green-600 text-xs">✓</span>
+                      </span>
+                      <span className="text-[#0F1A2E]/70 text-sm">{benefit}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>

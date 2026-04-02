@@ -23,9 +23,11 @@ const FeaturedCourses = () => {
 
   if (loading) {
     return (
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-[#E9EAEC]">
         <div className="container mx-auto px-6">
-          <div className="text-center">Loading courses...</div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E4B61A] mx-auto"></div>
+          </div>
         </div>
       </section>
     );
@@ -36,12 +38,16 @@ const FeaturedCourses = () => {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-50">
+    <section className="py-20 bg-[#E9EAEC]">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Premium Courses</h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Industry-focused courses designed to level up your career
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#E4B61A]/10 rounded-full mb-6">
+            <span className="w-2 h-2 bg-[#E4B61A] rounded-full"></span>
+            <span className="text-[#0F1A2E] font-bold text-sm uppercase tracking-wider">Featured Programs</span>
+          </div>
+          <h2 className="text-4xl font-black text-[#0F1A2E] mb-4">Training Programs</h2>
+          <p className="text-[#0F1A2E]/60 text-lg max-w-2xl mx-auto">
+            Industry-focused programs designed to level up your career
           </p>
         </div>
 
@@ -49,29 +55,30 @@ const FeaturedCourses = () => {
           {courses.map((course) => (
             <div
               key={course.id}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+              className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-[#0F1A2E]/5"
             >
-              <div className="h-48 overflow-hidden">
+              <div className="h-48 overflow-hidden relative">
                 <img
                   src={course.image}
                   alt={course.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F1A2E]/60 to-transparent"></div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2 line-clamp-2">{course.title}</h3>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                <h3 className="text-xl font-bold text-[#0F1A2E] mb-2 line-clamp-2 group-hover:text-[#E4B61A] transition-colors">{course.title}</h3>
+                <p className="text-[#0F1A2E]/60 text-sm mb-4 line-clamp-3">
                   {course.description}
                 </p>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm text-gray-500">By {course.teacher}</span>
-                  <span className="text-2xl font-bold text-indigo-600">₹{course.price}</span>
+                  <span className="text-sm text-[#0F1A2E]/50">By {course.teacher}</span>
+                  <span className="text-2xl font-black text-[#0F1A2E]">₹{course.price}</span>
                 </div>
                 <Link
                   to={`/courses/${course.id}`}
-                  className="block w-full bg-indigo-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                  className="block w-full bg-[#0F1A2E] text-white text-center py-3 rounded-xl font-bold hover:bg-[#E4B61A] hover:text-[#0F1A2E] transition-all duration-300"
                 >
-                  Enroll Now
+                  View Details
                 </Link>
               </div>
             </div>
@@ -81,9 +88,9 @@ const FeaturedCourses = () => {
         <div className="text-center mt-12">
           <Link
             to="/courses"
-            className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-full font-bold hover:bg-indigo-700 transition-all hover:shadow-lg"
+            className="inline-block bg-[#E4B61A] text-[#0F1A2E] px-8 py-4 rounded-xl font-black hover:bg-[#d4a610] transition-all hover:shadow-lg hover:-translate-y-1"
           >
-            View All Courses
+            View All Training Programs
           </Link>
         </div>
       </div>

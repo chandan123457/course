@@ -8,8 +8,6 @@ import Mentors from '../components/Mentors';
 import MockInterviews from '../components/MockInterviews';
 import PlacementPortal from '../components/PlacementPortal';
 import CareerJourney from '../components/CareerJourney';
-import ComingSoon from '../components/ComingSoon';
-import FeaturedCourses from '../components/FeaturedCourses';
 import FeaturedWebinars from '../components/FeaturedWebinars';
 
 const HomePage = () => {
@@ -20,13 +18,11 @@ const HomePage = () => {
       <PlatformEcosystem />
       <IndustrialCertification />
       <TrainingPrograms />
-      <FeaturedCourses />
       <FeaturedWebinars />
       <Mentors />
       <MockInterviews />
       <PlacementPortal />
       <CareerJourney />
-      <ComingSoon />
     </>
   );
 };
