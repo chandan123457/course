@@ -219,8 +219,8 @@ const AuthPage = () => {
       console.log('✅ User saved to database');
       console.log('🎉 Account created successfully!');
 
-      // Redirect to dashboard
-      navigate('/dashboard');
+      // Redirect to my courses
+      navigate('/my-courses');
     } catch (err) {
       console.error('❌ Error creating account:', err);
 
@@ -265,8 +265,8 @@ const AuthPage = () => {
 
       console.log('✅ Sign in successful!');
 
-      // Redirect to dashboard
-      navigate('/dashboard');
+      // Redirect to my courses
+      navigate('/my-courses');
     } catch (err) {
       console.error('❌ Error signing in:', err);
 

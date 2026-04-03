@@ -103,7 +103,7 @@ const UserDashboard = () => {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#E4B61A]/20 rounded-full mb-4">
                 <span className="w-2 h-2 bg-[#E4B61A] rounded-full animate-pulse"></span>
-                <span className="text-[#E4B61A] font-bold text-xs uppercase tracking-wider">Dashboard</span>
+                <span className="text-[#E4B61A] font-bold text-xs uppercase tracking-wider">My Courses</span>
               </div>
               <h1 className="text-3xl lg:text-4xl font-black text-white mb-2">
                 Welcome back, {user?.name || currentUser?.displayName || 'Student'}! 👋

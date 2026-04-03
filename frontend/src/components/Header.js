@@ -95,22 +95,12 @@ const Header = () => {
                   <button
                     onClick={() => {
                       setShowDropdown(false);
-                      navigate('/dashboard');
-                    }}
-                    className="w-full text-left px-4 py-3 hover:bg-[#E9EAEC] transition-colors flex items-center gap-3"
-                  >
-                    <span className="text-lg">📊</span>
-                    <span className="font-medium text-[#0F1A2E]">Dashboard</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowDropdown(false);
                       navigate('/my-courses');
                     }}
                     className="w-full text-left px-4 py-3 hover:bg-[#E9EAEC] transition-colors flex items-center gap-3"
                   >
                     <span className="text-lg">📚</span>
-                    <span className="font-medium text-[#0F1A2E]">My Programs</span>
+                    <span className="font-medium text-[#0F1A2E]">My Courses</span>
                   </button>
                   <hr className="my-2 border-[#0F1A2E]/10" />
                   <button
