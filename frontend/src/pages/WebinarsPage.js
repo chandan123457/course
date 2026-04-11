@@ -31,7 +31,7 @@ const WebinarsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#E9EAEC]">
+      <div className="min-h-screen flex items-center justify-center bg-[#F0F1F3]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E4B61A] mx-auto mb-4"></div>
           <p className="text-[#0F1A2E] font-medium">Loading webinars...</p>
@@ -41,38 +41,38 @@ const WebinarsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#E9EAEC] py-16">
-      <div className="container mx-auto px-6">
+    <div className="min-h-screen bg-[#F0F1F3]">
 
-        {/* Page Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#E4B61A]/10 rounded-full mb-6">
-            <span className="w-2 h-2 bg-[#E4B61A] rounded-full"></span>
-            <span className="text-[#0F1A2E] font-bold text-sm uppercase tracking-wider">Free Expert Sessions</span>
-          </div>
-          <h1 className="text-4xl lg:text-6xl font-black mb-6 text-[#0F1A2E] tracking-tight">
-            Live <span className="text-[#E4B61A]">Webinars</span>
-          </h1>
-          <p className="text-[#0F1A2E]/70 text-lg max-w-3xl mx-auto leading-relaxed">
-            Join our expert-led webinars and stay ahead in your career.
-            Learn from industry professionals and get your questions answered live.
-          </p>
-        </div>
+      {/* Page Header */}
+      <div className="container mx-auto px-6 pt-10 pb-6 text-center">
+        <span className="inline-flex items-center gap-2 bg-[#E4B61A]/10 text-[#0F1A2E] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">
+          <span className="w-1.5 h-1.5 bg-[#E4B61A] rounded-full"></span>
+          Free Expert Sessions
+        </span>
+        <h1 className="text-3xl lg:text-4xl font-black text-[#0F1A2E] mb-3 tracking-tight">
+          Live <span className="text-[#E4B61A]">Webinars</span>
+        </h1>
+        <p className="text-[#0F1A2E]/55 text-sm max-w-xl mx-auto leading-relaxed">
+          Join our expert-led webinars and stay ahead in your career.
+          Learn from industry professionals and get your questions answered live.
+        </p>
+      </div>
 
+      <div className="container mx-auto px-6 pb-10">
         {webinars.length === 0 ? (
           <div className="text-center py-20">
-            <div className="w-24 h-24 bg-[#E4B61A]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-5xl">🎙️</span>
+            <div className="w-20 h-20 bg-[#E4B61A]/10 rounded-full flex items-center justify-center mx-auto mb-5">
+              <span className="text-4xl">🎙️</span>
             </div>
-            <h3 className="text-2xl font-bold text-[#0F1A2E] mb-3">No webinars available</h3>
-            <p className="text-[#0F1A2E]/60 text-lg">New sessions coming soon. Stay tuned!</p>
+            <h3 className="text-xl font-bold text-[#0F1A2E] mb-2">No webinars available yet</h3>
+            <p className="text-[#0F1A2E]/50">New sessions coming soon. Stay tuned!</p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {webinars.map((webinar) => (
               <div
                 key={webinar.id}
-                className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col"
+                className="group bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col"
               >
                 {/* Image */}
                 <div className="relative h-44 overflow-hidden flex-shrink-0">
@@ -82,12 +82,10 @@ const WebinarsPage = () => {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   {/* Category badge */}
-                  <div className="absolute top-3 left-3">
-                    <span className="bg-white/90 backdrop-blur-sm text-[#0F1A2E] text-xs font-bold px-2.5 py-1 rounded-full">
-                      Free Webinar
-                    </span>
-                  </div>
-                  {/* Bookmark icon */}
+                  <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[#0F1A2E] text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">
+                    Free Webinar
+                  </span>
+                  {/* Bookmark */}
                   <button className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors">
                     <svg className="w-4 h-4 text-[#0F1A2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
@@ -95,30 +93,30 @@ const WebinarsPage = () => {
                   </button>
                 </div>
 
-                {/* Content */}
+                {/* Body */}
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="text-[#0F1A2E] font-bold text-base leading-snug mb-1.5 line-clamp-2">
+                  <h3 className="text-[#0F1A2E] font-bold text-[15px] leading-snug mb-1 line-clamp-2">
                     {webinar.title}
                   </h3>
-                  <p className="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
+                  <p className="text-gray-400 text-xs leading-relaxed mb-4 line-clamp-2">
                     {webinar.description}
                   </p>
 
-                  {/* Meta rows */}
-                  <div className="space-y-2 mb-5 mt-auto">
-                    <div className="flex items-center gap-2 text-xs text-gray-600">
+                  {/* Meta */}
+                  <div className="space-y-2 mb-4 mt-auto">
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
                       <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                       <span>{formatDate(webinar.date)} • {webinar.time}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-600">
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
                       <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.069A1 1 0 0121 8.882v6.236a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
                       </svg>
                       <span>Live Session</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-600">
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
                       <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
@@ -129,7 +127,7 @@ const WebinarsPage = () => {
                   {/* CTA */}
                   <Link
                     to={`/webinars/${webinar.id}`}
-                    className="block w-full bg-[#E4B61A] text-[#0F1A2E] text-center py-3 rounded-xl font-bold text-sm hover:bg-[#d4a610] transition-all duration-200 shadow-sm"
+                    className="block w-full bg-[#E4B61A] text-[#0F1A2E] text-center py-2.5 rounded-xl font-bold text-sm hover:bg-[#d4a610] transition-colors"
                   >
                     Register Free
                   </Link>
