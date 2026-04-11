@@ -59,7 +59,6 @@ function App() {
                   <main>
                     <WebinarsPage />
                   </main>
-                  <Footer />
                 </>
               } />
               <Route path="/welcome" element={

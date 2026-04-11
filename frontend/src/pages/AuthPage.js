@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { createUserWithEmailAndPassword, updateProfile, signOut as firebaseSignOut } from 'firebase/auth';
@@ -40,6 +40,14 @@ const AuthPage = () => {
   const [step, setStep] = useState(
     searchParams.get('mode') === 'signin' ? 'signin' : 'choice'
   ); // choice → phone → otp → signup OR signin
+
+  // Respond to URL param changes (handles in-SPA navigation to /auth?mode=signin
+  // when the component is already mounted and useState won't re-initialize)
+  useEffect(() => {
+    if (searchParams.get('mode') === 'signin') {
+      setStep('signin');
+    }
+  }, [searchParams]);
 
   // Store phone number for later use in signup
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -579,22 +587,13 @@ const AuthPage = () => {
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={() => setStep('choice')}
-                className="flex-1 py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-all"
-              >
-                Back
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex-1 py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-              >
-                {loading ? '🔑 Signing In...' : '🔑 Sign In'}
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              {loading ? '🔑 Signing In...' : '🔑 Sign In'}
+            </button>
 
             <p className="text-center text-sm text-gray-600">
               Don't have an account?{' '}
