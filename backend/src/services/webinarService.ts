@@ -118,7 +118,7 @@ export const webinarService = {
         CREATE TABLE IF NOT EXISTS "webinar_lead_registrations" (
           "id" SERIAL PRIMARY KEY,
           "webinar_id" INTEGER NOT NULL REFERENCES "webinars"("id") ON DELETE CASCADE ON UPDATE CASCADE,
-          "full_name" TEXT NOT NULL,
+          "full_name" TEXT NOT NULL DEFAULT '',
           "email" TEXT NOT NULL,
           "phone_number" TEXT NOT NULL,
           "college_or_profession" TEXT NOT NULL,
