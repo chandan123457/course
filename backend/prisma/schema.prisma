@@ -36,7 +36,8 @@ model Webinar {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  registrations WebinarRegistration[]
+  registrations       WebinarRegistration[]
+  leadRegistrations   WebinarLeadRegistration[]
 
   @@map("webinars")
 }
@@ -120,4 +121,24 @@ model WebinarRegistration {
 
   @@unique([userId, webinarId])
   @@map("webinar_registrations")
+}
+
+model WebinarLeadRegistration {
+  id                  Int      @id @default(autoincrement())
+  webinarId           Int      @map("webinar_id")
+  fullName            String   @map("full_name")
+  email               String
+  phoneNumber         String   @map("phone_number")
+  collegeOrProfession String   @map("college_or_profession")
+  courseInterest      String   @map("course_interest")
+  experienceLevel     String   @map("experience_level")
+  referralSource      String?  @map("referral_source")
+  questions           String?
+  registeredAt        DateTime @default(now()) @map("registered_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  webinar Webinar @relation(fields: [webinarId], references: [id], onDelete: Cascade)
+
+  @@unique([webinarId, email])
+  @@map("webinar_lead_registrations")
 }

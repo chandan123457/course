@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { body } from 'express-validator';
 import { webinarService } from '../services/webinarService';
-import { asyncHandler, AppError } from '../middlewares/errorHandler';
+import { asyncHandler, AppError, handleValidationErrors } from '../middlewares/errorHandler';
 
 export const webinarController = {
   // Create webinar (Admin only)
@@ -114,6 +114,47 @@ export const webinarController = {
     });
   }),
 
+  // Public registration for webinar landing page
+  registerLeadForWebinar: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const webinarId = parseInt(req.params.id, 10);
+    const {
+      fullName,
+      email,
+      phoneNumber,
+      collegeOrProfession,
+      courseInterest,
+      experienceLevel,
+      referralSource,
+      questions,
+    } = req.body;
+
+    if (Number.isNaN(webinarId)) {
+      throw new AppError('Valid webinar ID is required', 400);
+    }
+
+    const webinar = await webinarService.getWebinarById(webinarId);
+    if (!webinar) {
+      throw new AppError('Webinar not found', 404);
+    }
+
+    const registration = await webinarService.registerLeadForWebinar(webinarId, {
+      fullName,
+      email,
+      phoneNumber,
+      collegeOrProfession,
+      courseInterest,
+      experienceLevel,
+      referralSource,
+      questions,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Registration submitted successfully',
+      data: registration,
+    });
+  }),
+
   // Get user's registered webinars
   getUserWebinars: asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user!.id;
@@ -135,4 +176,48 @@ export const validateCreateWebinar = [
   body('teacher').notEmpty().withMessage('Teacher name is required'),
   body('date').notEmpty().withMessage('Date is required'),
   body('time').notEmpty().withMessage('Time is required'),
+];
+
+export const validateLeadRegistration = [
+  body('fullName')
+    .trim()
+    .notEmpty()
+    .withMessage('Full name is required')
+    .isLength({ min: 2, max: 120 })
+    .withMessage('Full name must be between 2 and 120 characters'),
+  body('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Email address is required')
+    .isEmail()
+    .withMessage('Please enter a valid email address'),
+  body('phoneNumber')
+    .trim()
+    .notEmpty()
+    .withMessage('Phone number is required')
+    .isLength({ min: 7, max: 20 })
+    .withMessage('Phone number must be between 7 and 20 characters'),
+  body('collegeOrProfession')
+    .trim()
+    .notEmpty()
+    .withMessage('College or profession is required'),
+  body('courseInterest')
+    .trim()
+    .notEmpty()
+    .withMessage('Course interest is required'),
+  body('experienceLevel')
+    .trim()
+    .notEmpty()
+    .withMessage('Experience level is required'),
+  body('referralSource')
+    .optional({ values: 'falsy' })
+    .trim()
+    .isLength({ max: 160 })
+    .withMessage('Referral source must be 160 characters or fewer'),
+  body('questions')
+    .optional({ values: 'falsy' })
+    .trim()
+    .isLength({ max: 1000 })
+    .withMessage('Questions must be 1000 characters or fewer'),
+  handleValidationErrors,
 ];
