@@ -201,7 +201,7 @@ const WebinarsPage = () => {
                   Registration is currently open.
                 </p>
                 <p className="mt-2 text-sm leading-6 text-[#0F1A2E]/60">
-                  Click "Register Free" on any webinar card to reserve your seat instantly.
+                  Click "Register Now" on any webinar card to reserve your seat instantly.
                 </p>
               </div>
             </div>
@@ -267,7 +267,7 @@ const WebinarsPage = () => {
                     onClick={() => openRegistrationModal(webinar)}
                     className="mt-6 w-full rounded-2xl bg-[#E4B61A] px-4 py-3 text-sm font-bold text-[#0F1A2E] transition-colors hover:bg-[#d7aa12]"
                   >
-                    Register Free
+                    Register Now
                   </button>
                 </div>
               </article>
